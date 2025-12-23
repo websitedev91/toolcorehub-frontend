@@ -43,7 +43,7 @@ const toolIcons: Record<string, any> = {
   // YouTube
   "YouTube Thumbnail Downloader": Image,
   "YouTube Video Title Extractor": Type,
-  "YouTube Channel ID Finder": Link,
+  "YouTube Channel ID Checker": Link,
   "YouTube Description Generator": BookOpen,
   "YouTube Tag Extractor": FileBox,
   "YouTube Video Downloader": Video,
