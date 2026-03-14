@@ -215,14 +215,14 @@ export default function Home() {
     "All Categories";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 text-[15px]">
+    <div className="min-h-screen bg-[#F5F3FF] text-violet-950 text-[15px]">
       <main className="max-w-6xl mx-auto px-4 pt-12 pb-16">
         {/* Hero */}
         <section className="text-center mb-12">
-          <h1 className="text-[34px] font-semibold mb-3 text-slate-50">
+          <h1 className="text-[34px] font-semibold mb-3 text-violet-950">
             Free Online Tools
           </h1>
-          <p className="text-[15px] text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[15px] text-violet-700 max-w-2xl mx-auto leading-relaxed">
             46+ powerful tools across 5 categories to boost your productivity.
             No logins, no limits, just instant results.
           </p>
@@ -232,19 +232,19 @@ export default function Home() {
         <section className="mb-20">
           <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-3">
             {/* Search field */}
-            <div className="flex-1 h-12 bg-slate-900/95 border border-violet-500/60 rounded-full px-5 flex items-center gap-3 shadow-[0_12px_40px_rgba(88,28,135,0.45)]">
-              <Search className="h-5 w-5 text-slate-300 shrink-0" />
+            <div className="flex-1 h-12 bg-white border border-violet-300 rounded-full px-5 flex items-center gap-3 shadow-[0_8px_30px_rgba(124,58,237,0.12)]">
+              <Search className="h-5 w-5 text-violet-400 shrink-0" />
               <Input
                 placeholder="Search for any tool..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="border-0 bg-transparent text-[15px] focus-visible:ring-0 focus-visible:ring-offset-0 px-0 placeholder:text-slate-500"
+                className="border-0 bg-transparent text-[15px] focus-visible:ring-0 focus-visible:ring-offset-0 px-0 placeholder:text-violet-300 text-violet-900"
               />
             </div>
 
             {/* Category dropdown */}
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full md:w-[240px] h-12 min-h-[48px] rounded-full bg-slate-900/95 border border-violet-500/60 text-[15px] px-5 flex items-center shadow-[0_12px_40px_rgba(88,28,135,0.45)]">
+              <SelectTrigger className="w-full md:w-[240px] h-12 min-h-[48px] rounded-full bg-white border border-violet-300 text-[15px] px-5 flex items-center shadow-[0_8px_30px_rgba(124,58,237,0.12)] text-violet-900">
                 <SelectValue placeholder="Category">
                   {currentCategoryLabel}
                 </SelectValue>
@@ -259,7 +259,7 @@ export default function Home() {
             </Select>
 
             {/* Search button */}
-            <Button className="h-12 rounded-full px-8 text-[15px] bg-violet-500 hover:bg-violet-400 shadow-[0_12px_40px_rgba(88,28,135,0.55)]">
+            <Button className="h-12 rounded-full px-8 text-[15px] bg-[#7C3AED] hover:bg-[#5B21B6] text-white shadow-[0_8px_30px_rgba(124,58,237,0.35)]">
               Search
             </Button>
           </div>
@@ -274,18 +274,18 @@ export default function Home() {
 
           return (
             <section key={categoryKey} className="mt-20 mb-20">
-              {/* Centered heading with glow line */}
+              {/* Centered heading with divider */}
               <div className="flex flex-col items-center text-center gap-3 mb-10">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 to-sky-500 flex items-center justify-center shadow-[0_10px_30px_rgba(56,189,248,0.45)]">
+                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#7C3AED] to-[#A78BFA] flex items-center justify-center shadow-[0_10px_30px_rgba(124,58,237,0.35)]">
                   <CategoryIcon className="h-5 w-5 text-white" />
                 </div>
-                <h2 className="text-2xl font-semibold text-slate-50">
+                <h2 className="text-2xl font-semibold text-violet-950">
                   {categoryInfo.label}
                 </h2>
-                <p className="text-[12px] text-slate-400">
+                <p className="text-[12px] text-violet-500">
                   {tools.length} tool{tools.length > 1 ? "s" : ""} in this category
                 </p>
-                <div className="mt-1 h-px w-32 bg-gradient-to-r from-transparent via-violet-500/70 to-transparent shadow-[0_0_18px_rgba(139,92,246,0.8)]" />
+                <div className="mt-1 h-px w-32 bg-gradient-to-r from-transparent via-[#7C3AED]/60 to-transparent" />
               </div>
 
               {/* Tools grid */}
@@ -295,12 +295,12 @@ export default function Home() {
 
                   return (
                     <Link key={tool.slug} href={`/tools/${tool.slug}`}>
-                      <Card className="group bg-slate-900/95 border border-slate-800 rounded-2xl hover:border-violet-500/80 hover:bg-slate-900 transition-all cursor-pointer shadow-[0_10px_32px_rgba(0,0,0,0.55)] hover:shadow-[0_16px_40px_rgba(88,28,135,0.65)]">
+                      <Card className="group bg-white border border-violet-200 rounded-2xl hover:border-[#7C3AED] transition-all cursor-pointer shadow-[0_4px_20px_rgba(124,58,237,0.08)] hover:shadow-[0_8px_32px_rgba(124,58,237,0.2)]">
                         <CardHeader className="flex flex-row items-center gap-4 py-5 px-6">
-                          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 to-sky-500 flex items-center justify-center shadow-[0_10px_30px_rgba(56,189,248,0.5)] group-hover:scale-105 transition-transform">
+                          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#7C3AED] to-[#A78BFA] flex items-center justify-center shadow-[0_6px_20px_rgba(124,58,237,0.3)] group-hover:scale-105 transition-transform">
                             <Icon className="h-5 w-5 text-white" />
                           </div>
-                          <CardTitle className="text-[16px] font-semibold text-slate-50 leading-snug">
+                          <CardTitle className="text-[16px] font-semibold text-violet-900 leading-snug">
                             {tool.name}
                           </CardTitle>
                         </CardHeader>
