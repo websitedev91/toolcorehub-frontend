@@ -248,9 +248,13 @@ export default function Home() {
                 {currentCategoryLabel}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-[#1E293B] border-[#334155] text-[#F8FAFC]">
+            <SelectContent className="bg-[#1E293B] border-[#334155]">
               {categories.map((cat) => (
-                <SelectItem key={cat.value} value={cat.value} className="focus:bg-[#334155]">
+                <SelectItem
+                  key={cat.value}
+                  value={cat.value}
+                  className="text-[#F8FAFC] focus:bg-[#2563EB] focus:text-white data-[highlighted]:bg-[#2563EB] data-[highlighted]:text-white cursor-pointer"
+                >
                   {cat.label}
                 </SelectItem>
               ))}
