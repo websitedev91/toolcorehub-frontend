@@ -4,14 +4,9 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   async rewrites() {
     return [
-      // Proxy Rank Math sitemap index (rewrites domain inside XML)
+      // Proxy all Rank Math sitemaps (sitemap_index.xml, post-sitemap.xml, etc.)
       {
-        source: "/blog/sitemap_index.xml",
-        destination: "/api/sitemap-proxy?path=sitemap_index.xml",
-      },
-      // Proxy individual sitemaps (post-sitemap.xml, page-sitemap.xml, etc.)
-      {
-        source: "/blog/:sitemap(*-sitemap*.xml)",
+        source: "/blog/:sitemap([\\w-]+\\.xml)",
         destination: "/api/sitemap-proxy?path=:sitemap",
       },
     ];
