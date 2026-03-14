@@ -215,104 +215,101 @@ export default function Home() {
     "All Categories";
 
   return (
-    <div className="min-h-screen bg-[#F5F3FF] text-violet-950 text-[15px]">
-      <main className="max-w-6xl mx-auto px-4 pt-12 pb-16">
-        {/* Hero */}
-        <section className="text-center mb-12">
-          <h1 className="text-[34px] font-semibold mb-3 text-violet-950">
-            Free Online Tools
-          </h1>
-          <p className="text-[15px] text-violet-700 max-w-2xl mx-auto leading-relaxed">
-            46+ powerful tools across 5 categories to boost your productivity.
-            No logins, no limits, just instant results.
-          </p>
-        </section>
+    <div className="px-12 py-12 pb-16">
+      {/* Hero */}
+      <section className="mb-12">
+        <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-[#2563EB] to-[#7C3AED] bg-clip-text text-transparent">
+          Free Online Tools
+        </h1>
+        <p className="text-base text-[#94A3B8] max-w-2xl leading-relaxed">
+          46+ powerful tools across 5 categories to boost your productivity.
+          No logins, no limits, just instant results.
+        </p>
+      </section>
 
-        {/* Search + Category */}
-        <section className="mb-20">
-          <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-3">
-            {/* Search field */}
-            <div className="flex-1 h-12 bg-white border border-violet-300 rounded-full px-5 flex items-center gap-3 shadow-[0_8px_30px_rgba(124,58,237,0.12)]">
-              <Search className="h-5 w-5 text-violet-400 shrink-0" />
-              <Input
-                placeholder="Search for any tool..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="border-0 bg-transparent text-[15px] focus-visible:ring-0 focus-visible:ring-offset-0 px-0 placeholder:text-violet-300 text-violet-900"
-              />
+      {/* Search + Category */}
+      <section className="mb-12">
+        <div className="flex flex-col md:flex-row gap-3 max-w-3xl">
+          {/* Search field */}
+          <div className="flex-1 h-11 bg-[#1E293B] border border-[#334155] rounded-lg px-4 flex items-center gap-3 focus-within:border-[#2563EB] transition-colors">
+            <Search className="h-4 w-4 text-[#94A3B8] shrink-0" />
+            <Input
+              placeholder="Search for any tool..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="border-0 bg-transparent text-sm focus-visible:ring-0 focus-visible:ring-offset-0 px-0 placeholder:text-[#94A3B8] text-[#F8FAFC]"
+            />
+          </div>
+
+          {/* Category dropdown */}
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <SelectTrigger className="w-full md:w-[200px] h-11 bg-[#1E293B] border border-[#334155] rounded-lg text-sm px-4 text-[#F8FAFC] focus:ring-0 focus:border-[#2563EB]">
+              <SelectValue placeholder="Category">
+                {currentCategoryLabel}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="bg-[#1E293B] border-[#334155] text-[#F8FAFC]">
+              {categories.map((cat) => (
+                <SelectItem key={cat.value} value={cat.value} className="focus:bg-[#334155]">
+                  {cat.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Search button */}
+          <Button className="h-11 px-6 text-sm bg-[#2563EB] hover:bg-[#1d4ed8] text-white rounded-lg shadow-[0_4px_16px_rgba(37,99,235,0.4)] transition-colors">
+            Search
+          </Button>
+        </div>
+      </section>
+
+      {/* Category clusters */}
+      {Object.entries(groupedTools).map(([categoryKey, tools]) => {
+        if (tools.length === 0) return null;
+
+        const categoryInfo = getCategoryInfo(categoryKey);
+        const CategoryIcon = categoryInfo.icon;
+
+        return (
+          <section key={categoryKey} className="mb-12">
+            {/* Section heading */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#2563EB] to-[#38BDF8] flex items-center justify-center shrink-0">
+                <CategoryIcon className="h-4 w-4 text-white" />
+              </div>
+              <h2 className="text-xl font-semibold text-[#F8FAFC]">
+                {categoryInfo.label}
+              </h2>
+              <span className="text-xs text-[#94A3B8] bg-[#1E293B] border border-[#334155] px-2 py-0.5 rounded-full">
+                {tools.length} tool{tools.length > 1 ? "s" : ""}
+              </span>
             </div>
 
-            {/* Category dropdown */}
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-              <SelectTrigger className="w-full md:w-[240px] h-12 min-h-[48px] rounded-full bg-white border border-violet-300 text-[15px] px-5 flex items-center shadow-[0_8px_30px_rgba(124,58,237,0.12)] text-violet-900">
-                <SelectValue placeholder="Category">
-                  {currentCategoryLabel}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {/* Tools grid */}
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {tools.map((tool) => {
+                const Icon = toolIcons[tool.name] || Sparkles;
 
-            {/* Search button */}
-            <Button className="h-12 rounded-full px-8 text-[15px] bg-[#7C3AED] hover:bg-[#5B21B6] text-white shadow-[0_8px_30px_rgba(124,58,237,0.35)]">
-              Search
-            </Button>
-          </div>
-        </section>
-
-        {/* Category clusters */}
-        {Object.entries(groupedTools).map(([categoryKey, tools]) => {
-          if (tools.length === 0) return null;
-
-          const categoryInfo = getCategoryInfo(categoryKey);
-          const CategoryIcon = categoryInfo.icon;
-
-          return (
-            <section key={categoryKey} className="mt-20 mb-20">
-              {/* Centered heading with divider */}
-              <div className="flex flex-col items-center text-center gap-3 mb-10">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#7C3AED] to-[#A78BFA] flex items-center justify-center shadow-[0_10px_30px_rgba(124,58,237,0.35)]">
-                  <CategoryIcon className="h-5 w-5 text-white" />
-                </div>
-                <h2 className="text-2xl font-semibold text-violet-950">
-                  {categoryInfo.label}
-                </h2>
-                <p className="text-[12px] text-violet-500">
-                  {tools.length} tool{tools.length > 1 ? "s" : ""} in this category
-                </p>
-                <div className="mt-1 h-px w-32 bg-gradient-to-r from-transparent via-[#7C3AED]/60 to-transparent" />
-              </div>
-
-              {/* Tools grid */}
-              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {tools.map((tool) => {
-                  const Icon = toolIcons[tool.name] || Sparkles;
-
-                  return (
-                    <Link key={tool.slug} href={`/tools/${tool.slug}`}>
-                      <Card className="group bg-white border border-violet-200 rounded-2xl hover:border-[#7C3AED] transition-all cursor-pointer shadow-[0_4px_20px_rgba(124,58,237,0.08)] hover:shadow-[0_8px_32px_rgba(124,58,237,0.2)]">
-                        <CardHeader className="flex flex-row items-center gap-4 py-5 px-6">
-                          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#7C3AED] to-[#A78BFA] flex items-center justify-center shadow-[0_6px_20px_rgba(124,58,237,0.3)] group-hover:scale-105 transition-transform">
-                            <Icon className="h-5 w-5 text-white" />
-                          </div>
-                          <CardTitle className="text-[16px] font-semibold text-violet-900 leading-snug">
-                            {tool.name}
-                          </CardTitle>
-                        </CardHeader>
-                      </Card>
-                    </Link>
-                  );
-                })}
-              </div>
-            </section>
-          );
-        })}
-      </main>
+                return (
+                  <Link key={tool.slug} href={`/tools/${tool.slug}`}>
+                    <Card className="group bg-[#1E293B] border border-[#334155] rounded-[12px] hover:border-[#2563EB] transition-all cursor-pointer shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_4px_20px_rgba(37,99,235,0.2)]">
+                      <CardHeader className="flex flex-row items-center gap-4 py-[24px] px-[24px]">
+                        <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-[#2563EB] to-[#38BDF8] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-[0_4px_12px_rgba(37,99,235,0.35)]">
+                          <Icon className="h-4 w-4 text-white" />
+                        </div>
+                        <CardTitle className="text-sm font-medium text-[#F8FAFC] leading-snug group-hover:text-[#38BDF8] transition-colors">
+                          {tool.name}
+                        </CardTitle>
+                      </CardHeader>
+                    </Card>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { Sidebar } from "@/components/layout/Sidebar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,10 +22,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-[#0F172A]`}>
+        {/* Fixed top nav */}
         <SiteHeader />
-        {children}
-        <SiteFooter />
+
+        {/* Dashboard shell: sidebar + main */}
+        <div className="flex pt-16 min-h-screen">
+          {/* Fixed left sidebar */}
+          <Sidebar />
+
+          {/* Scrollable main content */}
+          <main className="ml-64 flex-1 min-h-full bg-[#0F172A]">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
