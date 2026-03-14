@@ -229,7 +229,7 @@ export default function Home() {
 
       {/* Search + Category */}
       <section className="mb-12">
-        <div className="flex flex-col md:flex-row gap-3 max-w-3xl">
+        <div className="flex items-center gap-3 max-w-3xl">
           {/* Search field */}
           <div className="flex-1 h-11 bg-[#1E293B] border border-[#334155] rounded-lg px-4 flex items-center gap-3 focus-within:border-[#2563EB] transition-colors">
             <Search className="h-4 w-4 text-[#94A3B8] shrink-0" />
@@ -237,13 +237,13 @@ export default function Home() {
               placeholder="Search for any tool..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="border-0 bg-transparent text-sm focus-visible:ring-0 focus-visible:ring-offset-0 px-0 placeholder:text-[#94A3B8] text-[#F8FAFC]"
+              className="border-0 bg-transparent text-sm focus-visible:ring-0 focus-visible:ring-offset-0 px-0 placeholder:text-[#94A3B8] text-[#F8FAFC] h-full"
             />
           </div>
 
           {/* Category dropdown */}
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-full md:w-[200px] h-11 bg-[#1E293B] border border-[#334155] rounded-lg text-sm px-4 text-[#F8FAFC] focus:ring-0 focus:border-[#2563EB]">
+            <SelectTrigger className="w-[180px] h-11 min-h-[44px] bg-[#1E293B] border border-[#334155] rounded-lg text-sm px-4 text-[#F8FAFC] focus:ring-0 focus:ring-offset-0 focus:border-[#2563EB] shrink-0">
               <SelectValue placeholder="Category">
                 {currentCategoryLabel}
               </SelectValue>
@@ -258,7 +258,7 @@ export default function Home() {
           </Select>
 
           {/* Search button */}
-          <Button className="h-11 px-6 text-sm bg-[#2563EB] hover:bg-[#1d4ed8] text-white rounded-lg shadow-[0_4px_16px_rgba(37,99,235,0.4)] transition-colors">
+          <Button className="h-11 px-6 text-sm bg-[#2563EB] hover:bg-[#1d4ed8] text-white rounded-lg shadow-[0_4px_16px_rgba(37,99,235,0.4)] transition-colors shrink-0">
             Search
           </Button>
         </div>
