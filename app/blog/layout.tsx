@@ -7,7 +7,7 @@ export default function BlogLayout({
   children: React.ReactNode;
 }): React.ReactElement {
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-white">
       <div className="max-w-6xl mx-auto px-4 py-12">
         {children}
       </div>

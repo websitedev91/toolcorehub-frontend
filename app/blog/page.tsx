@@ -1,7 +1,7 @@
 // app/blog/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getPosts, featuredImage, postCategories } from "@/lib/wordpress";
+import { getPosts, featuredImage, postCategories, postAuthor } from "@/lib/wordpress";
 import type { WPPost } from "@/lib/wordpress";
 
 export const revalidate = 60;
@@ -23,9 +23,15 @@ function stripHtml(html: string): string {
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
   });
+}
+
+function estimateReadTime(content: string): number {
+  const text = stripHtml(content);
+  const wordCount = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(wordCount / 200));
 }
 
 // ── Post card ─────────────────────────────────────────────────────────────────
@@ -34,15 +40,17 @@ function PostCard({ post }: { post: WPPost }): React.ReactElement {
   const image = featuredImage(post);
   const categories = postCategories(post);
   const excerpt = stripHtml(post.excerpt?.rendered ?? "");
+  const readTime = estimateReadTime(post.content?.rendered ?? post.excerpt?.rendered ?? "");
+  const author = postAuthor(post);
 
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-violet-500/60 hover:shadow-[0_8px_32px_rgba(88,28,135,0.35)] transition-all duration-200"
+      className="group flex flex-col bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl hover:border-orange-200 transition-all duration-200"
     >
       {/* Featured image */}
       {image?.source_url && (
-        <div className="overflow-hidden h-48 bg-slate-800">
+        <div className="overflow-hidden h-52 bg-gray-100">
           <img
             src={image.source_url}
             alt={image.alt_text || stripHtml(post.title.rendered)}
@@ -52,35 +60,61 @@ function PostCard({ post }: { post: WPPost }): React.ReactElement {
       )}
 
       <div className="flex flex-col flex-1 p-5 gap-3">
-        {/* Category badges */}
-        {categories.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {categories.slice(0, 2).map((cat) => (
-              <span
-                key={cat.id}
-                className="inline-block px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-violet-500/15 text-violet-300 border border-violet-500/25"
-              >
-                {cat.name}
-              </span>
-            ))}
-          </div>
-        )}
+        {/* Category badge + read time */}
+        <div className="flex items-center gap-3 flex-wrap">
+          {categories.length > 0 && (
+            <span className="inline-block px-3 py-1 text-[11px] font-bold rounded-full bg-orange-500 text-white uppercase tracking-wide">
+              {categories[0].name}
+            </span>
+          )}
+          <span className="flex items-center gap-1 text-xs text-gray-400">
+            <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" strokeWidth="2" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" strokeWidth="2" />
+            </svg>
+            {readTime} mins read
+          </span>
+        </div>
 
         {/* Title */}
         <h2
-          className="text-[16px] font-semibold text-slate-100 leading-snug group-hover:text-violet-300 transition-colors line-clamp-2"
+          className="text-[16px] font-bold text-gray-900 leading-snug group-hover:text-orange-500 transition-colors line-clamp-2"
           dangerouslySetInnerHTML={{ __html: post.title.rendered }}
         />
 
         {/* Excerpt */}
         {excerpt && (
-          <p className="text-sm text-slate-400 leading-relaxed line-clamp-3 flex-1">
+          <p className="text-sm text-gray-500 leading-relaxed line-clamp-3 flex-1">
             {excerpt}
           </p>
         )}
 
-        {/* Date */}
-        <p className="text-xs text-slate-500 mt-auto">{formatDate(post.date)}</p>
+        {/* Author + Date */}
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-gray-100">
+          <div className="flex items-center gap-2">
+            {author?.avatar_urls?.["48"] ? (
+              <img
+                src={author.avatar_urls["48"]}
+                alt={author.name}
+                className="w-7 h-7 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-xs font-bold text-orange-600">
+                {author?.name?.[0]?.toUpperCase() ?? "A"}
+              </div>
+            )}
+            <span className="text-sm font-medium text-gray-700">
+              {author?.name ?? "Author"}
+            </span>
+          </div>
+          <div className="flex items-center gap-1 text-xs text-gray-400">
+            <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" strokeWidth="2" />
+              <path strokeLinecap="round" d="M16 2v4M8 2v4M3 10h18" strokeWidth="2" />
+            </svg>
+            {formatDate(post.date)}
+          </div>
+        </div>
       </div>
     </Link>
   );
@@ -97,7 +131,6 @@ function Pagination({
 }): React.ReactElement | null {
   if (totalPages <= 1) return null;
 
-  // Show at most 5 page numbers around current
   const pages: (number | "…")[] = [];
   for (let i = 1; i <= totalPages; i++) {
     if (
@@ -125,7 +158,7 @@ function Pagination({
       {currentPage > 1 && (
         <Link
           href={`/blog?page=${currentPage - 1}`}
-          className={`${btnBase} bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700`}
+          className={`${btnBase} bg-white text-gray-600 hover:bg-gray-50 border border-gray-200`}
         >
           ← Prev
         </Link>
@@ -133,7 +166,7 @@ function Pagination({
 
       {pages.map((p, i) =>
         p === "…" ? (
-          <span key={`ellipsis-${i}`} className="text-slate-500 px-1">
+          <span key={`ellipsis-${i}`} className="text-gray-400 px-1">
             …
           </span>
         ) : (
@@ -142,8 +175,8 @@ function Pagination({
             href={`/blog?page=${p}`}
             className={`${btnBase} ${
               p === currentPage
-                ? "bg-violet-500 text-white border border-violet-500"
-                : "bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700"
+                ? "bg-orange-500 text-white border border-orange-500"
+                : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
             }`}
           >
             {p}
@@ -154,7 +187,7 @@ function Pagination({
       {currentPage < totalPages && (
         <Link
           href={`/blog?page=${currentPage + 1}`}
-          className={`${btnBase} bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700`}
+          className={`${btnBase} bg-white text-gray-600 hover:bg-gray-50 border border-gray-200`}
         >
           Next →
         </Link>
@@ -178,20 +211,25 @@ export default async function BlogPage({
   return (
     <div>
       {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-semibold text-slate-50 mb-3">
-          Blog
+      <div className="text-center mb-12">
+        <span className="inline-block px-5 py-1.5 text-xs font-bold uppercase tracking-widest bg-orange-500 text-white rounded-full mb-5">
+          Our Blog
+        </span>
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          Toolcorehub Blog
         </h1>
-        <p className="text-slate-400 text-[15px] max-w-xl">
-          Tips, guides, and deep-dives on tools, productivity, SEO, and finance.
+        <p className="text-gray-500 text-base max-w-xl mx-auto">
+          Tips, guides &amp; insights on{" "}
+          <span className="text-orange-500">SEO, AI tools, and digital marketing</span>
         </p>
+        <div className="mt-5 mx-auto w-16 h-1 bg-orange-500 rounded-full" />
       </div>
 
       {/* Grid or empty state */}
       {posts.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <p className="text-slate-400 text-lg mb-2">No posts found.</p>
-          <p className="text-slate-500 text-sm">
+          <p className="text-gray-500 text-lg mb-2">No posts found.</p>
+          <p className="text-gray-400 text-sm">
             Check back soon — new articles are on the way.
           </p>
         </div>

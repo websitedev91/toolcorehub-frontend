@@ -18,6 +18,16 @@ export interface WPCategory {
   slug: string;
 }
 
+export interface WPAuthor {
+  id: number;
+  name: string;
+  avatar_urls?: {
+    "24"?: string;
+    "48"?: string;
+    "96"?: string;
+  };
+}
+
 export interface WPPost {
   id: number;
   slug: string;
@@ -29,6 +39,7 @@ export interface WPPost {
   _embedded?: {
     "wp:featuredmedia"?: WPFeaturedMedia[];
     "wp:term"?: WPCategory[][];
+    author?: WPAuthor[];
   };
 }
 
@@ -47,8 +58,12 @@ function postCategories(post: WPPost): WPCategory[] {
   return post._embedded?.["wp:term"]?.[0] ?? [];
 }
 
+function postAuthor(post: WPPost): WPAuthor | undefined {
+  return post._embedded?.["author"]?.[0];
+}
+
 // Re-export helpers so consumers don't need to know the shape
-export { featuredImage, postCategories };
+export { featuredImage, postCategories, postAuthor };
 
 // ── API functions ─────────────────────────────────────────────────────────────
 
